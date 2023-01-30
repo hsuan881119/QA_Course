@@ -2,7 +2,6 @@ from os import system
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from bs4 import BeautifulSoup
 import time
 import openpyxl
 from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font

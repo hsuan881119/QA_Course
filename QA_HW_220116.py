@@ -23,6 +23,7 @@ def wait(driver, path):
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, path)))
 
 def screenshot(driver, filename):
+    time.sleep(0.2)
     driver.get_screenshot_as_file(os.getcwd() + filename)
 
 def wait_and_click(driver, path):
@@ -53,27 +54,32 @@ screenshot(driver, '/home_page.png')
 menu_btn = wait_and_click(driver, './/div[@class="cubre-o-header__burger"]')
 product_intro_btn = wait_and_click(driver, '/html/body/div[1]/header/div/div[3]/div/div[2]/div/div/div[1]/div[1]')
 creditcard_btn = wait_and_click(driver, './/div[@class="cubre-o-menuLinkList__btn"]')
-#calculate number of list item and screenshot
-creditcard_items = find_items(driver, 
+#find list items and screenshot
+creditcardlist_items = find_items(driver, 
     '/html/body/div[1]/header/div/div[3]/div/div[2]/div/div/div[1]/div[2]/div/div[1]/div[2]', 
     './/a[@class="cubre-a-menuLink"][@id="lnk_Link"]')
 screenshot(driver, '/creditcard_list.png')
 #click card_intro
-card_intro_btn = creditcard_items[0]
+card_intro_btn = creditcardlist_items[0]
 card_intro_btn.click()
-#stopissuing_cards
 time.sleep(10)
 #mv_to_stopissuing_cards(driver, '/html/body/div[1]/main/article/div/div/div/div[1]/div/div/a[6]')
+#find stopissuing_cards items and screenshot
 stopissuing_cards_items = find_items(driver,
     '/html/body/div[1]/main/article/section[6]/div/div[2]/div/div[2]',
-    './/span[contains(@class, "swiper-pagination-bullet")]')
-#screenshot stopissuing_cards    
+    './/span[contains(@class, "swiper-pagination-bullet")]')   
 for (idx, item) in enumerate(stopissuing_cards_items):
     item.click()
-    WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/article/section[6]/div/div[2]/div/div[1]/div['+str(idx+1)+']')))
-    time.sleep(0.2)
-    driver.get_screenshot_as_file(os.getcwd() + ('/stopissuing_card_'+str(idx+1)+'.png'))
-
-print("--------\n",len(creditcard_items))
-print("--------\n",len(stopissuing_cards_items))
-print("--------")
+    wait(driver, ('/html/body/div[1]/main/article/section[6]/div/div[2]/div/div[1]/div['+str(idx+1)+']'))
+    screenshot(driver, ('/stopissuing_card_'+str(idx+1)+'.png'))
+#output results
+print("-----------------------------------")
+print("信用卡選單項目數量:",len(creditcardlist_items))
+num_of_stopissuing_cards = 0
+for path in os.listdir(os.getcwd()):
+    if os.path.isfile(os.path.join(os.getcwd(), path)) and path.startswith("stopissuing_card_"):
+        num_of_stopissuing_cards += 1
+print("-----------------------------------")
+if num_of_stopissuing_cards == len(stopissuing_cards_items):
+    print("停發卡數量與截圖數量一致,皆為:",len(stopissuing_cards_items))
+print("-----------------------------------")
