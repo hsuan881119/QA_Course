@@ -83,3 +83,5 @@ print("-----------------------------------")
 if num_of_stopissuing_cards == len(stopissuing_cards_items):
     print("停發卡數量與截圖數量一致,皆為:",len(stopissuing_cards_items))
 print("-----------------------------------")
+
+driver.quit()
