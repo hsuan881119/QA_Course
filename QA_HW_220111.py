@@ -29,7 +29,11 @@ body = table.find_element(By.ID,"resultContainer")
 products = body.find_elements(By.XPATH, './/div[@class="cubinvest-l-table__tr"]')
 
 
-workbook = openpyxl.Workbook()
+if os.path.isfile('CUB_ETF.xlsx'):
+        workbook = openpyxl.load_workbook('CUB_ETF.xlsx')
+else:
+        workbook = openpyxl.Workbook()
+
 sheet = workbook.worksheets[0]
 sheet.row_dimensions[1].height = 20
 sheet.column_dimensions['B'].width = 36
@@ -52,3 +56,5 @@ for (idx_row, product) in enumerate(products):
 
 workbook.save('CUB_ETF.xlsx')
 workbook.close()
+
+chrome.quit()
